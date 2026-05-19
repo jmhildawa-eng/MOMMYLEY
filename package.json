@@ -30,7 +30,6 @@
   "engines": {
     "node": ">=18.0.0"
   }
-npm init -y
-npm install discord.js @discordjs/voice
+{ 
   
 }
