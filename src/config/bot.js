@@ -544,6 +544,45 @@ export function getRandomColor() {
 
 export default botConfig;
 
+const { Client, GatewayIntentBits } = require('discord.js');
+const { joinVoiceChannel } = require('@discordjs/voice');
 
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
+
+const TOKEN = process.env.TOKEN;
+
+client.once('ready', () => {
+  console.log(`Logged in as ${client.user.tag}`);
+});
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+
+  // JOIN COMMAND
+  if (message.content === '!join') {
+    const channel = message.member.voice.channel;
+
+    if (!channel) {
+      return message.reply('Join a voice channel first.');
+    }
+
+    joinVoiceChannel({
+      channelId: channel.id,
+      guildId: message.guild.id,
+      adapterCreator: message.guild.voiceAdapterCreator,
+    });
+
+    message.reply('Joined voice channel 🎤');
+  }
+});
+
+client.login(TOKEN);
 
 
